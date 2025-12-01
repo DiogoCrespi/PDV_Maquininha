@@ -39,8 +39,14 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
         
-        // Redirecionar para a aplicação principal
-        window.location.href = '/vendas.html';
+        // Verificar tipo de usuário e redirecionar
+        if (data.usuario.tipo === 'admin') {
+            // Admin pode escolher entre vendas e bilheteria
+            // Por padrão vai para vendas, mas pode acessar /bilheteria.html
+            window.location.href = '/vendas.html';
+        } else {
+            window.location.href = '/vendas.html';
+        }
         
     } catch (error) {
         errorMessage.textContent = error.message;

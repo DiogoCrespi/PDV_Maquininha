@@ -22,10 +22,17 @@ app.use('/api/cartoes', require('./routes/cartoes'));
 app.use('/api/categorias', require('./routes/categorias'));
 app.use('/api/produtos', require('./routes/produtos'));
 app.use('/api/pedidos', require('./routes/pedidos'));
+app.use('/api/pagamentos', require('./routes/pagamentos'));
+app.use('/api/comandas', require('./routes/comandas'));
+app.use('/api/bilheteria', require('./routes/bilheteria'));
 
-// Rota raiz - servir o frontend
+// Rotas do frontend
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/bilheteria.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'bilheteria.html'));
 });
 
 // Middleware de tratamento de erros

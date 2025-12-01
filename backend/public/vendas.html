@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PDV - Vendas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="vendas.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🛒 Sistema PDV</h1>
+            <div class="header-right">
+                <div class="carrinho-badge" id="carrinhoBadge" style="display: none;">
+                    <span id="carrinhoCount">0</span>
+                </div>
+                <button class="btn-carrinho" id="btnCarrinho">
+                    🛒 Carrinho
+                </button>
+                <button class="btn-logout" id="btnLogout">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tela de Categorias -->
+    <div id="telaCategorias" class="tela ativa">
+        <div class="container">
+            <h2>Selecione uma Categoria</h2>
+            <div class="categorias-grid" id="categoriasGrid">
+                <!-- Categorias serão carregadas aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Produtos -->
+    <div id="telaProdutos" class="tela">
+        <div class="container">
+            <div class="produtos-header">
+                <button class="btn-voltar" id="btnVoltarCategorias">← Voltar</button>
+                <h2 id="tituloCategoria">Produtos</h2>
+            </div>
+            <div class="produtos-grid" id="produtosGrid">
+                <!-- Produtos serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Quantidade -->
+    <div id="modalQuantidade" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalProdutoNome">Produto</h3>
+                <button class="modal-close" id="btnFecharModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="produto-info">
+                    <p class="produto-preco" id="modalProdutoPreco">R$ 0,00</p>
+                    <p class="produto-descricao" id="modalProdutoDescricao"></p>
+                </div>
+                <div class="quantidade-selector">
+                    <label for="quantidade">Quantidade:</label>
+                    <div class="quantidade-controls">
+                        <button class="btn-quantidade" id="btnDiminuir">-</button>
+                        <input type="number" id="quantidade" min="1" value="1" readonly>
+                        <button class="btn-quantidade" id="btnAumentar">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelarModal">Cancelar</button>
+                <button class="btn-primary" id="btnAdicionarCarrinho">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela do Carrinho -->
+    <div id="telaCarrinho" class="tela">
+        <div class="container">
+            <div class="carrinho-header">
+                <button class="btn-voltar" id="btnVoltarProdutos">← Voltar</button>
+                <h2>Meu Carrinho</h2>
+            </div>
+            <div class="carrinho-content">
+                <div class="carrinho-itens" id="carrinhoItens">
+                    <!-- Itens do carrinho serão carregados aqui -->
+                </div>
+                <div class="carrinho-resumo">
+                    <div class="resumo-total">
+                        <span>Total:</span>
+                        <span class="total-valor" id="carrinhoTotal">R$ 0,00</span>
+                    </div>
+                    <button class="btn-primary btn-finalizar" id="btnFinalizarCompra" disabled>
+                        Finalizar Compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendas.js"></script>
+</body>
+</html>
+

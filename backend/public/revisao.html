@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PDV - Revisão do Pedido</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="vendas.css">
+    <link rel="stylesheet" href="revisao.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>📋 Revisão do Pedido</h1>
+            <button class="btn-logout" id="btnLogout">Sair</button>
+        </div>
+    </header>
+
+    <div class="container revisao-container">
+        <!-- Itens do Pedido -->
+        <div class="revisao-section">
+            <h2>Itens do Pedido</h2>
+            <div class="pedido-itens" id="pedidoItens">
+                <!-- Itens serão carregados aqui -->
+            </div>
+        </div>
+
+        <!-- Resumo e Ações -->
+        <div class="revisao-sidebar">
+            <!-- Número da Mesa -->
+            <div class="revisao-section">
+                <h3>Número da Mesa</h3>
+                <div class="mesa-input-group">
+                    <input type="text" id="numeroMesa" placeholder="Ex: 5 ou deixe em branco para balcão" maxlength="10">
+                    <button class="btn-info" id="btnInfoMesa" title="Deixe em branco para pedidos de balcão ou viagem">ℹ️</button>
+                </div>
+                <small class="mesa-hint">Deixe em branco para balcão/viagem</small>
+            </div>
+
+            <!-- Resumo Total -->
+            <div class="revisao-section">
+                <div class="resumo-total">
+                    <div class="resumo-linha">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="resumo-linha total">
+                        <span>Total:</span>
+                        <span class="total-valor" id="totalPedido">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="revisao-acoes">
+                <button class="btn-secondary" id="btnVoltar">← Voltar ao Carrinho</button>
+                <button class="btn-primary btn-avancar" id="btnAvancar" disabled>
+                    Avançar para Pagamento →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Observação -->
+    <div id="modalObservacao" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="modalObservacaoTitulo">Observação</h3>
+                <button class="modal-close" id="btnFecharModalObs">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="observacaoTexto">Adicione uma observação para este item:</label>
+                <textarea 
+                    id="observacaoTexto" 
+                    rows="4" 
+                    maxlength="200" 
+                    placeholder="Ex: Sem cebola, bem passado, etc."
+                ></textarea>
+                <small class="char-count"><span id="charCount">0</span>/200 caracteres</small>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelarObs">Cancelar</button>
+                <button class="btn-primary" id="btnSalvarObs">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="revisao.js"></script>
+</body>
+</html>
+

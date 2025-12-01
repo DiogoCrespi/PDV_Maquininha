@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PDV - Pagamento</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="vendas.css">
+    <link rel="stylesheet" href="pagamento.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>💳 Pagamento</h1>
+            <button class="btn-logout" id="btnLogout">Sair</button>
+        </div>
+    </header>
+
+    <div class="container pagamento-container">
+        <!-- Informações do Pedido -->
+        <div class="pagamento-section">
+            <h2>Resumo do Pedido</h2>
+            <div class="pedido-resumo" id="pedidoResumo">
+                <!-- Resumo será carregado aqui -->
+            </div>
+            <div class="valor-total">
+                <span>Valor Total:</span>
+                <span class="total-grande" id="valorTotal">R$ 0,00</span>
+            </div>
+        </div>
+
+        <!-- Área de Pagamento -->
+        <div class="pagamento-section">
+            <h2>Dados do Cartão</h2>
+            
+            <!-- Leitura do Cartão -->
+            <div class="cartao-leitura">
+                <label for="cartaoId">ID do Cartão:</label>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="cartaoId" 
+                        placeholder="Passe o cartão ou digite o ID"
+                        autocomplete="off"
+                        autofocus
+                    >
+                    <button class="btn-buscar" id="btnBuscarCartao">🔍 Buscar</button>
+                </div>
+                <small class="hint">Passe o cartão no leitor ou digite o ID manualmente</small>
+            </div>
+
+            <!-- Dados do Cartão (preenchidos automaticamente) -->
+            <div class="cartao-dados" id="cartaoDados" style="display: none;">
+                <div class="dado-item">
+                    <label>Nome do Cliente:</label>
+                    <div class="dado-valor" id="nomeCliente">-</div>
+                </div>
+                <div class="dado-item">
+                    <label>Saldo Disponível:</label>
+                    <div class="dado-valor saldo" id="saldoCartao">R$ 0,00</div>
+                </div>
+                <div class="dado-item">
+                    <label>Valor do Pedido:</label>
+                    <div class="dado-valor pedido-valor" id="valorPedido">R$ 0,00</div>
+                </div>
+                <div class="dado-item">
+                    <label>Saldo Após Pagamento:</label>
+                    <div class="dado-valor saldo-apos" id="saldoApos">R$ 0,00</div>
+                </div>
+                <div class="dado-item">
+                    <label>Horário:</label>
+                    <div class="dado-valor" id="horarioAtual">-</div>
+                </div>
+            </div>
+
+            <!-- Mensagens de Erro/Sucesso -->
+            <div id="mensagemErro" class="mensagem erro" style="display: none;"></div>
+            <div id="mensagemSucesso" class="mensagem sucesso" style="display: none;"></div>
+
+            <!-- Botões de Ação -->
+            <div class="pagamento-acoes">
+                <button class="btn-secondary" id="btnCancelar">Cancelar</button>
+                <button class="btn-primary btn-pagar" id="btnPagar" disabled>
+                    💳 Processar Pagamento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Confirmar Pagamento</h3>
+                <button class="modal-close" id="btnFecharModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente processar o pagamento?</p>
+                <div class="confirmacao-detalhes">
+                    <div class="detalhe-item">
+                        <span>Cliente:</span>
+                        <strong id="confirmNome">-</strong>
+                    </div>
+                    <div class="detalhe-item">
+                        <span>Valor:</span>
+                        <strong id="confirmValor">R$ 0,00</strong>
+                    </div>
+                    <div class="detalhe-item">
+                        <span>Saldo após:</span>
+                        <strong id="confirmSaldo">R$ 0,00</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelarConfirmacao">Cancelar</button>
+                <button class="btn-primary" id="btnConfirmarPagamento">Confirmar Pagamento</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="pagamento.js"></script>
+</body>
+</html>
+

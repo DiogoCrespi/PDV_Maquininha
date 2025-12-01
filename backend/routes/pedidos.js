@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../config/database');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, isAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -92,6 +92,113 @@ router.get('/:id', authenticate, async (req, res, next) => {
     res.json({
       ...pedido,
       itens
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Listar pedidos
+router.get('/', authenticate, async (req, res, next) => {
+  try {
+    const { status, data, limite = 50 } = req.query;
+    
+    let query = `SELECT p.*, u.nome as usuario_nome 
+                 FROM pedidos p 
+                 LEFT JOIN usuarios u ON p.usuario_id = u.id 
+                 WHERE 1=1`;
+    const params = [];
+
+    if (status) {
+      query += ' AND p.status = ?';
+      params.push(status);
+    }
+
+    if (data) {
+      query += ' AND DATE(p.criado_em) = ?';
+      params.push(data);
+    }
+
+    query += ' ORDER BY p.criado_em DESC LIMIT ?';
+    params.push(parseInt(limite));
+
+    const pedidos = await db.allAsync(query, params);
+    res.json(pedidos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Atualizar pedido (admin)
+router.put('/:id', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const { numero_mesa, status } = req.body;
+
+    const pedido = await db.getAsync('SELECT * FROM pedidos WHERE id = ?', [req.params.id]);
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido não encontrado' });
+    }
+
+    if (pedido.pago === 1) {
+      return res.status(400).json({ error: 'Não é possível alterar pedido já pago' });
+    }
+
+    await db.runAsync(
+      'UPDATE pedidos SET numero_mesa = ?, status = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
+      [
+        numero_mesa !== undefined ? numero_mesa : pedido.numero_mesa,
+        status || pedido.status,
+        req.params.id
+      ]
+    );
+
+    const pedidoAtualizado = await db.getAsync(
+      `SELECT p.*, u.nome as usuario_nome 
+       FROM pedidos p 
+       LEFT JOIN usuarios u ON p.usuario_id = u.id 
+       WHERE p.id = ?`,
+      [req.params.id]
+    );
+
+    res.json(pedidoAtualizado);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Cancelar pedido (admin)
+router.post('/:id/cancelar', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const pedido = await db.getAsync('SELECT * FROM pedidos WHERE id = ?', [req.params.id]);
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido não encontrado' });
+    }
+
+    if (pedido.pago === 1) {
+      return res.status(400).json({ error: 'Não é possível cancelar pedido já pago' });
+    }
+
+    if (pedido.status === 'cancelado') {
+      return res.status(400).json({ error: 'Pedido já está cancelado' });
+    }
+
+    await db.runAsync(
+      'UPDATE pedidos SET status = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
+      ['cancelado', req.params.id]
+    );
+
+    const pedidoAtualizado = await db.getAsync(
+      `SELECT p.*, u.nome as usuario_nome 
+       FROM pedidos p 
+       LEFT JOIN usuarios u ON p.usuario_id = u.id 
+       WHERE p.id = ?`,
+      [req.params.id]
+    );
+
+    res.json({
+      success: true,
+      message: 'Pedido cancelado com sucesso',
+      pedido: pedidoAtualizado
     });
   } catch (error) {
     next(error);

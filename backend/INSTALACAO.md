@@ -8,16 +8,33 @@
 npm install
 ```
 
-### 2. Configurar Variáveis de Ambiente (Opcional)
+### 2. Configurar Variáveis de Ambiente (OBRIGATÓRIO)
 
-Crie um arquivo `.env` na raiz do projeto com:
+Copie o arquivo de exemplo e configure:
+
+**Windows PowerShell:**
+```powershell
+Copy-Item .env.example .env
+```
+
+**Linux/Mac:**
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` e configure:
 
 ```
 PORT=3000
-JWT_SECRET=seu-secret-key-super-seguro-aqui
+JWT_SECRET=seu-secret-key-super-seguro-aqui-mude-em-producao
+ADMIN_USUARIO=admin
+ADMIN_SENHA=admin123
+ADMIN_NOME=Administrador
 ```
 
-⚠️ **IMPORTANTE**: Altere o `JWT_SECRET` para um valor seguro em produção!
+⚠️ **IMPORTANTE**: 
+- Altere o `JWT_SECRET` para um valor seguro e único em produção!
+- Altere as credenciais do administrador (`ADMIN_USUARIO` e `ADMIN_SENHA`)!
 
 ### 3. Inicializar Banco de Dados
 
@@ -28,7 +45,7 @@ npm run init-db
 Este comando irá:
 - Criar todas as tabelas necessárias
 - Inserir categorias iniciais (Refrigerante, Cerveja, Chopp, Porções, Lanches, Picolés)
-- Criar usuário admin padrão (usuário: `admin`, senha: `admin123`)
+- Criar usuário admin padrão usando as credenciais definidas no arquivo `.env`
 
 ### 4. Iniciar o Servidor
 
@@ -70,10 +87,12 @@ ip addr show
 ## 📝 Primeiro Acesso
 
 1. Acesse a URL do servidor no navegador
-2. Faça login com:
-   - **Usuário**: `admin`
-   - **Senha**: `admin123`
-3. ⚠️ **IMPORTANTE**: Altere a senha do admin após o primeiro acesso!
+2. Faça login com as credenciais definidas no arquivo `.env`:
+   - **Usuário**: Valor de `ADMIN_USUARIO` (padrão: `admin`)
+   - **Senha**: Valor de `ADMIN_SENHA` (padrão: `admin123`)
+3. ⚠️ **IMPORTANTE**: 
+   - Altere as credenciais no arquivo `.env` antes de usar em produção!
+   - Altere o `JWT_SECRET` para um valor seguro!
 
 ## 🛠️ Solução de Problemas
 

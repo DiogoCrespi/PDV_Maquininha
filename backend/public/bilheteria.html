@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PDV - Bilheteria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bilheteria.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🎫 Sistema Bilheteria</h1>
+            <div class="header-right">
+                <span id="usuarioNome" class="usuario-nome"></span>
+                <button class="btn-logout" id="btnLogout">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu de Navegação -->
+    <nav class="nav-menu">
+        <button class="nav-btn active" data-tela="ativar">➕ Ativar Cartão</button>
+        <button class="nav-btn" data-tela="recarregar">💳 Recarregar</button>
+        <button class="nav-btn" data-tela="devolver">💰 Devolver</button>
+        <button class="nav-btn" data-tela="consultar">🔍 Consultar</button>
+        <button class="nav-btn" data-tela="relatorios">📊 Relatórios</button>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Tela de Ativação -->
+        <div id="telaAtivar" class="tela ativa">
+            <div class="card">
+                <h2>Ativar Cartão</h2>
+                <form id="formAtivar">
+                    <div class="form-group">
+                        <label for="ativarCartaoId">ID do Cartão:</label>
+                        <input type="text" id="ativarCartaoId" required autocomplete="off" placeholder="Digite o ID do cartão">
+                    </div>
+                    <div class="form-group">
+                        <label for="ativarNomeCliente">Nome do Cliente:</label>
+                        <input type="text" id="ativarNomeCliente" required placeholder="Nome completo do cliente">
+                    </div>
+                    <button type="submit" class="btn-primary">Ativar Cartão</button>
+                </form>
+                <div id="resultadoAtivar" class="resultado"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Recarga -->
+        <div id="telaRecarregar" class="tela">
+            <div class="card">
+                <h2>Recarregar Saldo</h2>
+                <form id="formRecarregar">
+                    <div class="form-group">
+                        <label for="recarregarCartaoId">ID do Cartão:</label>
+                        <input type="text" id="recarregarCartaoId" required autocomplete="off" placeholder="Digite o ID do cartão">
+                        <button type="button" class="btn-buscar" id="btnBuscarRecarregar">🔍 Buscar</button>
+                    </div>
+                    <div id="dadosCartaoRecarregar" class="dados-cartao" style="display: none;">
+                        <div class="info-cartao">
+                            <p><strong>Cliente:</strong> <span id="recarregarNomeCliente">-</span></p>
+                            <p><strong>Saldo Atual:</strong> <span id="recarregarSaldoAtual" class="saldo">R$ 0,00</span></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="recarregarValor">Valor da Recarga (R$):</label>
+                            <input type="number" id="recarregarValor" step="0.01" min="0.01" required placeholder="0.00">
+                        </div>
+                        <button type="submit" class="btn-primary">Recarregar</button>
+                    </div>
+                </form>
+                <div id="resultadoRecarregar" class="resultado"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Devolução -->
+        <div id="telaDevolver" class="tela">
+            <div class="card">
+                <h2>Devolver Saldo</h2>
+                <form id="formDevolver">
+                    <div class="form-group">
+                        <label for="devolverCartaoId">ID do Cartão:</label>
+                        <input type="text" id="devolverCartaoId" required autocomplete="off" placeholder="Digite o ID do cartão">
+                        <button type="button" class="btn-buscar" id="btnBuscarDevolver">🔍 Buscar</button>
+                    </div>
+                    <div id="dadosCartaoDevolver" class="dados-cartao" style="display: none;">
+                        <div class="info-cartao">
+                            <p><strong>Cliente:</strong> <span id="devolverNomeCliente">-</span></p>
+                            <p><strong>Saldo Disponível:</strong> <span id="devolverSaldoAtual" class="saldo">R$ 0,00</span></p>
+                            <p class="aviso-horario">⚠️ Devolução permitida apenas após 17h</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="devolverValor">Valor a Devolver (R$):</label>
+                            <input type="number" id="devolverValor" step="0.01" min="0.01" placeholder="Deixe em branco para devolver tudo">
+                            <small>Deixe em branco para devolver todo o saldo</small>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="devolverCancelarCartao">
+                                Cancelar cartão após devolução
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Devolver Saldo</button>
+                    </div>
+                </form>
+                <div id="resultadoDevolver" class="resultado"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Consulta -->
+        <div id="telaConsultar" class="tela">
+            <div class="card">
+                <h2>Consultar Cartão</h2>
+                <form id="formConsultar">
+                    <div class="form-group">
+                        <label for="consultarCartaoId">ID do Cartão:</label>
+                        <input type="text" id="consultarCartaoId" required autocomplete="off" placeholder="Digite o ID do cartão">
+                        <button type="submit" class="btn-buscar">🔍 Consultar</button>
+                    </div>
+                </form>
+                <div id="resultadoConsultar" class="resultado"></div>
+                <div id="historicoTransacoes" class="historico" style="display: none;">
+                    <h3>Histórico de Transações</h3>
+                    <div id="listaTransacoes"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Relatórios -->
+        <div id="telaRelatorios" class="tela">
+            <div class="card">
+                <h2>Relatórios</h2>
+                <div class="relatorios-menu">
+                    <button class="btn-relatorio" data-relatorio="recargas">📈 Recargas do Dia</button>
+                    <button class="btn-relatorio" data-relatorio="devolucoes">📉 Devoluções do Dia</button>
+                    <button class="btn-relatorio" data-relatorio="cartoes-ativos">📋 Cartões Ativos</button>
+                </div>
+                <div id="resultadoRelatorios" class="resultado"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="bilheteria.js"></script>
+</body>
+</html>
+

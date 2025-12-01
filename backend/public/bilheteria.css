@@ -1,0 +1,369 @@
+/* Header */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.usuario-nome {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.btn-logout {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Menu de Navegação */
+.nav-menu {
+    background: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background: #e0e0e0;
+}
+
+.nav-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Telas */
+.tela {
+    display: none;
+}
+
+.tela.ativa {
+    display: block;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin: 0 0 25px 0;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+/* Formulários */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-group small {
+    display: block;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Botões */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-buscar {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+
+.btn-buscar:hover {
+    background: #5568d3;
+}
+
+/* Dados do Cartão */
+.dados-cartao {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border: 2px solid #667eea;
+}
+
+.info-cartao p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.saldo {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.aviso-horario {
+    color: #ff9800;
+    font-weight: 500;
+    margin-top: 15px !important;
+}
+
+/* Resultado */
+.resultado {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    display: none;
+}
+
+.resultado.sucesso {
+    background: #efe;
+    border: 1px solid #cfc;
+    color: #3c3;
+    display: block;
+}
+
+.resultado.erro {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    display: block;
+}
+
+/* Histórico */
+.historico {
+    margin-top: 30px;
+}
+
+.historico h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.lista-transacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.transacao-item {
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border-left: 4px solid #667eea;
+}
+
+.transacao-item .transacao-tipo {
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.transacao-item .transacao-detalhes {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Relatórios */
+.relatorios-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-relatorio {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-relatorio:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.relatorio-conteudo {
+    margin-top: 20px;
+}
+
+.relatorio-resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.resumo-item {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.resumo-item .resumo-label {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.resumo-item .resumo-valor {
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.tabela-relatorio {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabela-relatorio th,
+.tabela-relatorio td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tabela-relatorio th {
+    background: #f9f9f9;
+    font-weight: 600;
+    color: #333;
+}
+
+.tabela-relatorio tr:hover {
+    background: #f5f5f5;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .nav-menu {
+        padding: 10px;
+    }
+
+    .nav-btn {
+        padding: 8px 15px;
+        font-size: 0.85em;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .relatorios-menu {
+        grid-template-columns: 1fr;
+    }
+}
+

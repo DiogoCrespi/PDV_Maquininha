@@ -1,7 +1,12 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const db = require('../config/database');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'seu-secret-key-aqui-mude-em-producao';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('❌ ERRO: JWT_SECRET não definido no arquivo .env');
+  process.exit(1);
+}
 
 // Middleware de autenticação
 async function authenticate(req, res, next) {

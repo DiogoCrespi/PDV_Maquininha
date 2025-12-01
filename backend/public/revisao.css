@@ -1,0 +1,283 @@
+/* Container de Revisão */
+.revisao-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+}
+
+.revisao-section {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.revisao-section h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.revisao-section h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+/* Itens do Pedido */
+.pedido-itens {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pedido-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.pedido-item:hover {
+    border-color: #667eea;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.item-nome-quantidade {
+    flex: 1;
+}
+
+.item-nome {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.item-quantidade-preco {
+    display: flex;
+    gap: 15px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.item-total {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.2em;
+    min-width: 100px;
+    text-align: right;
+}
+
+.item-observacao {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.observacao-texto {
+    color: #666;
+    font-size: 0.9em;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+.observacao-vazia {
+    color: #999;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
+.btn-observacao {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #666;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    margin-top: 5px;
+    transition: background 0.3s;
+}
+
+.btn-observacao:hover {
+    background: #e0e0e0;
+}
+
+/* Sidebar */
+.revisao-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.mesa-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#numeroMesa {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1.1em;
+    transition: border-color 0.3s;
+}
+
+#numeroMesa:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-info {
+    background: #667eea;
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.btn-info:hover {
+    background: #5568d3;
+}
+
+.mesa-hint {
+    display: block;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+/* Resumo */
+.resumo-total {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.resumo-linha.total {
+    border-top: 2px solid #e0e0e0;
+    padding-top: 15px;
+    margin-top: 5px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.resumo-linha.total .total-valor {
+    color: #667eea;
+    font-size: 1.2em;
+}
+
+/* Ações */
+.revisao-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-avancar {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.btn-avancar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Modal de Observação */
+.modal-small {
+    max-width: 500px;
+}
+
+.modal-body label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+#observacaoTexto {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+#observacaoTexto:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+    .revisao-container {
+        grid-template-columns: 1fr;
+    }
+
+    .revisao-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .item-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .item-total {
+        text-align: left;
+        width: 100%;
+    }
+
+    .mesa-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-info {
+        align-self: flex-end;
+    }
+}
+

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../config/database');
 const bcrypt = require('bcryptjs');
 
@@ -162,12 +163,16 @@ async function insertInitialData() {
     VALUES (1, 'POS Principal', 'Ponto de venda principal')
   `);
 
-  // Criar usuário admin padrão (senha: admin123)
-  const senhaHash = await bcrypt.hash('admin123', 10);
+  // Criar usuário admin padrão
+  const adminUsuario = process.env.ADMIN_USUARIO || 'admin';
+  const adminSenha = process.env.ADMIN_SENHA || 'admin123';
+  const adminNome = process.env.ADMIN_NOME || 'Administrador';
+  
+  const senhaHash = await bcrypt.hash(adminSenha, 10);
   await db.runAsync(`
     INSERT OR IGNORE INTO usuarios (id, nome, usuario, senha, tipo, pos_id) 
-    VALUES (1, 'Administrador', 'admin', ?, 'admin', 1)
-  `, [senhaHash]);
+    VALUES (1, ?, ?, ?, 'admin', 1)
+  `, [adminNome, adminUsuario, senhaHash]);
 
   // Criar categorias iniciais
   const categorias = [
@@ -187,7 +192,7 @@ async function insertInitialData() {
   }
 
   console.log('✅ Dados iniciais inseridos!');
-  console.log('👤 Usuário padrão: admin / admin123');
+  console.log(`👤 Usuário admin criado: ${process.env.ADMIN_USUARIO || 'admin'}`);
 }
 
 // Executar inicialização

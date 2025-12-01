@@ -22,11 +22,20 @@ Sistema de Ponto de Venda desenvolvido para máquininha (POS) com sistema de car
 npm install
 ```
 
-3. Configure as variáveis de ambiente (opcional):
+3. Configure as variáveis de ambiente (OBRIGATÓRIO):
 ```bash
+# Windows PowerShell:
+Copy-Item .env.example .env
+
+# Linux/Mac:
 cp .env.example .env
-# Edite o .env com suas configurações
 ```
+
+**IMPORTANTE**: Edite o arquivo `.env` e configure:
+- `JWT_SECRET`: Chave secreta para tokens JWT (mude para um valor seguro!)
+- `ADMIN_USUARIO`: Usuário do administrador inicial
+- `ADMIN_SENHA`: Senha do administrador inicial
+- `ADMIN_NOME`: Nome do administrador
 
 4. Inicialize o banco de dados:
 ```bash
@@ -54,10 +63,14 @@ Exemplo: Se o servidor estiver no IP `192.168.1.100`, acesse `http://192.168.1.1
 
 ## 👤 Credenciais Padrão
 
-- **Usuário**: `admin`
-- **Senha**: `admin123`
+As credenciais do administrador inicial são definidas no arquivo `.env`:
+- `ADMIN_USUARIO`: Usuário (padrão: `admin`)
+- `ADMIN_SENHA`: Senha (padrão: `admin123`)
+- `ADMIN_NOME`: Nome (padrão: `Administrador`)
 
-⚠️ **IMPORTANTE**: Altere a senha padrão em produção!
+⚠️ **IMPORTANTE**: 
+- Altere as credenciais no arquivo `.env` antes de usar em produção!
+- Altere o `JWT_SECRET` para um valor seguro e único!
 
 ## 📁 Estrutura do Projeto
 
