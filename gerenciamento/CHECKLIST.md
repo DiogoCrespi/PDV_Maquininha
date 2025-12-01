@@ -16,7 +16,7 @@ Este arquivo acompanha o progresso do desenvolvimento do projeto. Marque as tare
 
 ### Configuração do Ambiente
 - [x] Definir stack tecnológica (Node.js + Express + SQLite)
-- [ ] Configurar repositório Git
+- [x] Configurar repositório Git
 - [x] Configurar ambiente de desenvolvimento
 - [x] Configurar estrutura de pastas
 - [x] Configurar dependências básicas
