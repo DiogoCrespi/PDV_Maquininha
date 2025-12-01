@@ -16,6 +16,18 @@ export default function CategoriasPage() {
   );
 }
 
+// Função para obter emoji baseado no nome da categoria
+function getCategoriaEmoji(nome: string): string {
+  const nomeLower = nome.toLowerCase();
+  if (nomeLower.includes('refrigerante')) return '🥤';
+  if (nomeLower.includes('cerveja')) return '🍺';
+  if (nomeLower.includes('chopp')) return '🍺';
+  if (nomeLower.includes('porção') || nomeLower.includes('porções')) return '🍗';
+  if (nomeLower.includes('lanche') || nomeLower.includes('lanches')) return '🍔';
+  if (nomeLower.includes('picolé') || nomeLower.includes('picolés')) return '🍧';
+  return '🍽️'; // Emoji padrão para comida
+}
+
 function CategoriasContent() {
   const router = useRouter();
   const { usuario, logout } = useAuth();
@@ -75,6 +87,9 @@ function CategoriasContent() {
                 className="text-center"
               >
                 <div className="p-6">
+                  <div className="text-5xl mb-3">
+                    {getCategoriaEmoji(categoria.nome)}
+                  </div>
                   <h2 className="text-lg font-semibold text-gray-900 mb-2">
                     {categoria.nome}
                   </h2>

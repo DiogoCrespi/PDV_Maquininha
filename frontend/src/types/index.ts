@@ -67,14 +67,22 @@ export interface Cartao {
   saldo: number;
   status: 'ativo' | 'inativo' | 'cancelado';
   created_at: string;
+  data_expiracao?: string;
 }
 
 export interface Transacao {
   id: number;
   cartao_id: string;
-  tipo: 'pagamento' | 'recarga' | 'devolucao';
+  tipo: 'pagamento' | 'recarga' | 'devolucao' | 'ativacao' | 'cancelamento';
   valor: number;
   pedido_id?: number;
-  created_at: string;
+  saldo_anterior?: number;
+  saldo_posterior?: number;
+  descricao?: string;
+  nome_cliente?: string;
+  numero_mesa?: string;
+  pedido_valor?: number;
+  criado_em: string;
+  created_at?: string; // Alias para compatibilidade
 }
 

@@ -3,12 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { cartoesApi } from '@/lib/api/cartoes';
+import { pagamentosApi } from '@/lib/api/pagamentos';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import Input from '@/components/Input';
+import CardReader from '@/components/CardReader';
 import Loading from '@/components/Loading';
-import type { Pedido } from '@/types';
+import Modal from '@/components/Modal';
+import type { Pedido, Cartao } from '@/types';
 
 export default function PagamentoPage() {
   return (
@@ -25,11 +28,16 @@ function PagamentoContent() {
   
   const pedidoId = searchParams.get('pedidoId');
   const [pedido, setPedido] = useState<Pedido | null>(null);
+  const [cartao, setCartao] = useState<Cartao | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingCartao, setLoadingCartao] = useState(false);
+  const [processando, setProcessando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [erroCartao, setErroCartao] = useState<string | null>(null);
+  const [showConfirmacao, setShowConfirmacao] = useState(false);
 
   useEffect(() => {
-    // Buscar pedido do localStorage ou da URL
+    // Buscar pedido do localStorage
     const pedidoSalvo = localStorage.getItem('pedidoAtual');
     if (pedidoSalvo) {
       try {
@@ -38,15 +46,93 @@ function PagamentoContent() {
       } catch {
         setErro('Erro ao carregar dados do pedido');
       }
-    } else if (pedidoId) {
-      // Se não tem no localStorage, buscar pela API
-      // Por enquanto, vamos usar o localStorage
-      setErro('Pedido não encontrado');
     } else {
-      setErro('ID do pedido não informado');
+      setErro('Pedido não encontrado');
     }
     setLoading(false);
-  }, [pedidoId]);
+  }, []);
+
+  const handleCardRead = async (cardId: string) => {
+    setErroCartao(null);
+    setLoadingCartao(true);
+    setCartao(null);
+
+    try {
+      const cartaoData = await cartoesApi.buscarPorId(cardId);
+      
+      // Validar cartão ativo
+      if (cartaoData.status !== 'ativo') {
+        setErroCartao('Cartão não está ativo');
+        setLoadingCartao(false);
+        return;
+      }
+
+      // Validar validade do saldo (12 meses)
+      if (cartaoData.created_at) {
+        const dataCriacao = new Date(cartaoData.created_at);
+        const dataExpiracao = new Date(dataCriacao);
+        dataExpiracao.setMonth(dataExpiracao.getMonth() + 12);
+        const hoje = new Date();
+        
+        if (dataExpiracao < hoje) {
+          setErroCartao('Saldo do cartão expirado (válido por 12 meses)');
+          setLoadingCartao(false);
+          return;
+        }
+      }
+
+      setCartao(cartaoData);
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        setErroCartao('Cartão não encontrado');
+      } else {
+        setErroCartao(error.response?.data?.error || 'Erro ao buscar cartão');
+      }
+    } finally {
+      setLoadingCartao(false);
+    }
+  };
+
+  const handleProcessarPagamento = () => {
+    if (!pedido || !cartao) return;
+
+    // Validar saldo
+    if (cartao.saldo < pedido.valor_total) {
+      setErroCartao('Saldo insuficiente');
+      return;
+    }
+
+    setShowConfirmacao(true);
+  };
+
+  const handleConfirmarPagamento = async () => {
+    if (!pedido || !cartao) return;
+
+    setShowConfirmacao(false);
+    setProcessando(true);
+    setErro(null);
+
+    try {
+      const resultado = await pagamentosApi.processar({
+        pedido_id: pedido.id,
+        cartao_id: cartao.id,
+        valor: pedido.valor_total,
+      });
+
+      // Limpar dados
+      localStorage.removeItem('pedidoAtual');
+      localStorage.removeItem('carrinho');
+
+      // Salvar resultado para a tela de confirmação
+      localStorage.setItem('pagamentoResultado', JSON.stringify(resultado));
+
+      // Redirecionar para confirmação
+      router.push(`/pagamento/confirmacao?pedidoId=${pedido.id}`);
+    } catch (error: any) {
+      setErro(error.response?.data?.error || 'Erro ao processar pagamento. Tente novamente.');
+      setProcessando(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -68,6 +154,9 @@ function PagamentoContent() {
       </div>
     );
   }
+
+  const saldoSuficiente = cartao ? cartao.saldo >= pedido.valor_total : false;
+  const saldoAposPagamento = cartao ? cartao.saldo - pedido.valor_total : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -117,20 +206,64 @@ function PagamentoContent() {
             </div>
           </Card>
 
-          {/* Informação de Pagamento */}
+          {/* Leitura de Cartão */}
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Informações de Pagamento
+              Leitura do Cartão
             </h2>
-            <p className="text-gray-600 mb-4">
-              Esta tela será implementada na FASE 4 com a integração do sistema de cartão.
-            </p>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Em desenvolvimento:</strong> Sistema de leitura de cartão e processamento de pagamento.
-              </p>
-            </div>
+            <CardReader
+              onCardRead={handleCardRead}
+              loading={loadingCartao}
+              error={erroCartao}
+            />
           </Card>
+
+          {/* Informações do Cartão */}
+          {cartao && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Informações do Cartão
+              </h2>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Nome do Cliente</span>
+                  <span className="font-semibold">{cartao.nome_cliente}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Saldo Atual</span>
+                  <span className={`font-semibold ${saldoSuficiente ? 'text-green-600' : 'text-red-600'}`}>
+                    R$ {cartao.saldo.toFixed(2).replace('.', ',')}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Valor do Pedido</span>
+                  <span className="font-semibold text-blue-600">
+                    R$ {pedido.valor_total.toFixed(2).replace('.', ',')}
+                  </span>
+                </div>
+                <div className="border-t pt-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 font-semibold">Saldo Após Pagamento</span>
+                    <span className={`text-lg font-bold ${saldoAposPagamento >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      R$ {saldoAposPagamento.toFixed(2).replace('.', ',')}
+                    </span>
+                  </div>
+                </div>
+                {!saldoSuficiente && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-3">
+                    Saldo insuficiente para realizar o pagamento
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
+
+          {/* Erro geral */}
+          {erro && (
+            <Card className="p-6 bg-red-50 border-red-200">
+              <p className="text-red-700">{erro}</p>
+            </Card>
+          )}
 
           {/* Botões */}
           <div className="flex gap-2">
@@ -138,22 +271,80 @@ function PagamentoContent() {
               variant="secondary"
               onClick={() => router.push('/categorias')}
               className="flex-1"
+              disabled={processando}
             >
-              Voltar
+              Cancelar
             </Button>
             <Button
               variant="primary"
-              onClick={() => {
-                // TODO: Implementar processamento de pagamento na FASE 4
-                alert('Sistema de pagamento será implementado na FASE 4');
-              }}
+              onClick={handleProcessarPagamento}
               className="flex-1"
+              disabled={!cartao || !saldoSuficiente || processando}
+              isLoading={processando}
             >
-              Processar Pagamento
+              {processando ? 'Processando...' : 'Processar Pagamento'}
             </Button>
           </div>
         </div>
       </main>
+
+      {/* Modal de Confirmação */}
+      <Modal
+        isOpen={showConfirmacao}
+        onClose={() => setShowConfirmacao(false)}
+        title="Confirmar Pagamento"
+        size="md"
+      >
+        {cartao && pedido && (
+          <div className="space-y-4">
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Cliente:</span>
+                <span className="font-semibold">{cartao.nome_cliente}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Valor:</span>
+                <span className="font-semibold text-blue-600">
+                  R$ {pedido.valor_total.toFixed(2).replace('.', ',')}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Saldo Atual:</span>
+                <span className="font-semibold">
+                  R$ {cartao.saldo.toFixed(2).replace('.', ',')}
+                </span>
+              </div>
+              <div className="flex justify-between border-t pt-2">
+                <span className="text-gray-600 font-semibold">Saldo Após:</span>
+                <span className="font-bold text-green-600">
+                  R$ {saldoAposPagamento.toFixed(2).replace('.', ',')}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-600">
+              Deseja confirmar o pagamento deste pedido?
+            </p>
+
+            <div className="flex gap-2 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => setShowConfirmacao(false)}
+                className="flex-1"
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleConfirmarPagamento}
+                className="flex-1"
+              >
+                Confirmar Pagamento
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

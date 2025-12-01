@@ -8,7 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -46,11 +51,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-  console.log(`📱 Acesse de qualquer máquina na rede: http://[IP-DO-SERVIDOR]:${PORT}`);
-});
+// Iniciar servidor apenas se não estiver em modo de teste
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    console.log(`📱 Acesse de qualquer máquina na rede: http://[IP-DO-SERVIDOR]:${PORT}`);
+  });
+}
 
 module.exports = app;
 
